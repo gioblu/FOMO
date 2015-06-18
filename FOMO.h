@@ -9,16 +9,18 @@
   #else
     #include "WProgram.h"
     #include "WConstants.h"
+    #include "/includes/data_types.h"
   #endif
 #endif
+
 
 class FOMO {
 
   public:
 
     FOMO();
-   
+    State state;
 
   private:
-    
+
 };
