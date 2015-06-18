@@ -9,17 +9,22 @@
   #else
     #include "WProgram.h"
     #include "WConstants.h"
-    #include "/includes/data_types.h"
   #endif
+  
+  #include "includes/data_types.h"
+  #include "includes/Agenda/Agenda.h"
 #endif
 
+#define FULL_OPERATIONAL  0
+#define HIBERNATION       1
 
 class FOMO {
 
   public:
-
-    FOMO();
-    State state;
+    FOMO(boolean debug);
+    
+    Agenda scheduler;
+    State  state;
 
   private:
 

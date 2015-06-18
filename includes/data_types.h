@@ -20,11 +20,13 @@ typedef struct {
  } Temperature;
 
 typedef struct {
+  uint8_t     mode;
   Heading     heading;
-  Posiiton    position;
-  Temperature temperature; 
+  Position    position;
+  int         speed;
   uint8_t     fv_panel_voltage;
   uint8_t     battery_voltage;
   int         pressure; 
+  Temperature temperature; 
   uint8_t     light;
  } State;
