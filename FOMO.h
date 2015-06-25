@@ -13,6 +13,7 @@
   
   #include "includes/data_types.h"
   #include "includes/Agenda/Agenda.h"
+  #include "LowPower.h"   
 #endif
 
 #define FULL_OPERATIONAL  0
