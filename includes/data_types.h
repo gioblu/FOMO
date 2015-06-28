@@ -2,13 +2,6 @@
 /* Necessary data types */
 
 typedef struct {
-  unsigned long duration;
-  uint8_t       phase;
-  uint8_t[20]   problems; 
- } Mission;
-
-
-typedef struct {
   float         latitude;
   float         longitude;
   int           altitude;
@@ -30,14 +23,6 @@ typedef struct {
 
 
 typedef struct {
-  uint8_t      mode;
-  Mission      mission;
-  Sensor[20]   sensors;
-  Data         data;
-} State;
-
-
-typedef struct {
   uint8_t      battery_voltage;
   uint8_t      fv_panel_voltage;
   int          light;
@@ -55,3 +40,13 @@ typedef struct {
   void         (*update_function)();
   boolean      empty;
 } Sensor;
+
+
+typedef struct {
+  Data          data;
+  unsigned long duration;
+  uint8_t       mode;
+  uint8_t       phase;
+  uint8_t       problems[20]; 
+  Sensor        sensors[20];
+} State;

@@ -2,13 +2,14 @@
  /* FOMO  */
 
 #include "FOMO.h"
-#include <avr/power.h>
 
 FOMO::FOMO(boolean debug) {
+  this->scheduler.insert(this->update_duration, 1000);
+};
 
 
-  this->add_process(this->update_duration, )
-
+void FOMO::update_duration() {
+  this->state.duration = millis() / 1000;
 };
 
 /* Add to instance_name.sensors a new sensor
@@ -19,7 +20,7 @@ FOMO::FOMO(boolean debug) {
 int FOMO::add_sensor(void (*update_function)(void), unsigned long interval) {
   int id = ID_NOT_AVAILABLE;
 
-  for(byte i = 0; i < 255; i++)
+  for(uint8_t i = 0; i < 255; i++)
     if(this->sensors[i].empty) {
       id = i;
       this->sensors[i].empty = false;
@@ -31,17 +32,14 @@ int FOMO::add_sensor(void (*update_function)(void), unsigned long interval) {
     Sensor sensor;
     sensor.update_function  = *update_function;
     sensor.id = (uint8_t)id;
-    if(interval) {
-      sensor.interval = interval;
-      int process_id = this->add_process(update_function, interval);
-     
-      if(process_id == PROCESS_ID_NOT_AVAILABLE)
-        return PROCESS_ID_NOT_AVAILABLE;
-
-      sensor.process_id = (uint8_t)process_id;
-    }
-
+    sensor.process_id = (uint8_t)process_id;
     this->sensors[id] = sensor;
+    
+    int process_id = this->scheduler.insert(update_function, interval);
+    
+    if(process_id == PROCESS_ID_NOT_AVAILABLE)
+      return PROCESS_ID_NOT_AVAILABLE;
+    
     return id;  
   }
 };
@@ -62,7 +60,7 @@ int FOMO::remove_sensor(uint8_t id) {
 
 
 int FOMO::activate_sensor(uint8_t id) {
-  return this->activate_process(this->sensors[id].process_id);
+  return this->scheduler.activate(this->sensors[id].process_id);
 };
 
 
@@ -72,15 +70,25 @@ int FOMO::activate_sensor(uint8_t id) {
    id: the id of the sensor you want to activate */
 
 int FOMO::deactivate_sensor(uint8_t id) {
-  return this->deactivate_process(this->sensors[id].process_id);
+  return this->scheduler.deactivate(this->sensors[id].process_id);
 };
 
 
 int FOMO::report_problem(byte problem) {
   for(byte i = 0; i < 20; i++)
-    if(this->state->mission->problems[i] == NO_PROBLEM) {
-      this->state->mission->problems[i] = problem;
+    if(this->problems[i] == NO_PROBLEM) {
+      this->problems[i] = problem;
       return DONE;
     }
   return TOO_MUCH_PROBLEMS;
 };
+
+
+void FOMO::hibernation_mode() {
+
+};
+
+void FOMO::full_operational_mode() {
+
+};
+
